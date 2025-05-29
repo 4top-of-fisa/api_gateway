@@ -47,11 +47,16 @@ public class AccessTokenValidationGatewayFilter extends AbstractGatewayFilterFac
 
             try {
                 jwtValidator.isTokenInvalid(token);
+                String username = jwtValidator.extractUsername(token);
+
+                ServerHttpRequest modifiedRequest = request.mutate()
+                        .header("X-User-Name", username)
+                        .build();
+
+                return chain.filter(exchange.mutate().request(modifiedRequest).build());
             } catch (Exception e) {
                 return globalErrorResponder.respond(exchange, HttpStatus.UNAUTHORIZED, new JwtValidationException401(e));
             }
-
-            return chain.filter(exchange.mutate().request(request).build());
         };
     }
 

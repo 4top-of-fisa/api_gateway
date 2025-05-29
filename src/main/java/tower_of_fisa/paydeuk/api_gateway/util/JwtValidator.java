@@ -44,5 +44,20 @@ public class JwtValidator {
                             .getBody();
 
     }
+
+    /**
+     * 토큰에서 사용자 이름 추출
+     *
+     * @param token JWT 토큰
+     * @return 사용자 이름
+     */
+    public String extractUsername(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
 }
 
