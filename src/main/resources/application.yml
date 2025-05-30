@@ -59,6 +59,13 @@ spring:
           filters:
             - RefreshTokenValidationGatewayFilter
 
+        - id: paydeuk-auth-logout
+          uri: http://localhost:8083
+          predicates:
+              - Path=/auth/api/logout
+          filters:
+            - AccessTokenValidationGatewayFilter
+
         - id: paydeuk-auth
           uri: http://localhost:8083
           predicates:
@@ -67,7 +74,3 @@ spring:
 error:
   printStackTrace: true # Stack trace 출력 여부
   printStackTraceLine: 10 # Stack trace 출력 줄 수
-
-logging:
-  level:
-    reactor.netty.http.server: DEBUG
