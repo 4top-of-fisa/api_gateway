@@ -16,8 +16,27 @@ management:
 spring:
   config:
     import: application-secret.yml
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password: 1234
   cloud:
     gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: 'http://localhost:3000'
+            allow-credentials: true
+            allowedHeaders: '*'
+            allowedMethods:
+              - PUT
+              - GET
+              - POST
+              - DELETE
+              - OPTIONS
       routes:
         - id: paydeuk-service
           uri: http://localhost:8081
@@ -48,3 +67,7 @@ spring:
 error:
   printStackTrace: true # Stack trace 출력 여부
   printStackTraceLine: 10 # Stack trace 출력 줄 수
+
+logging:
+  level:
+    reactor.netty.http.server: DEBUG
