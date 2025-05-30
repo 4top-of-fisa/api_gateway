@@ -7,6 +7,7 @@ import io.jsonwebtoken.security.SignatureException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -19,6 +20,9 @@ public class JwtValidator {
     private String rawKey;
     private Key secretKey;
 
+    private final RedisTemplate<String, Object> redisTemplate;
+
+    private static final String BLACKLIST_PREFIX = "blacklist:";
 
     @PostConstruct
     public void init() {
@@ -58,6 +62,18 @@ public class JwtValidator {
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+    }
+
+    /**
+     * Redis에 저장된 블랙리스트 체크
+     *
+     * @param token JWT 토큰
+     * @return true이면 블랙리스트에 있음, false이면 블랙리스트에 없음
+     */
+    public boolean isBlacklisted(String token) {
+        String key = BLACKLIST_PREFIX + token;
+        Boolean result = redisTemplate.hasKey(key);
+        return Boolean.TRUE.equals(result);
     }
 }
 

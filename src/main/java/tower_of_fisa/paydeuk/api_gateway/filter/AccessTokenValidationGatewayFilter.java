@@ -10,6 +10,7 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import tower_of_fisa.paydeuk.api_gateway.error.ErrorDefineCode;
 import tower_of_fisa.paydeuk.api_gateway.error.GlobalErrorResponder;
+import tower_of_fisa.paydeuk.api_gateway.error.exception.custom.AuthCredientialException401;
 import tower_of_fisa.paydeuk.api_gateway.error.exception.custom.InvalidAuthorizationHeaderException400;
 import tower_of_fisa.paydeuk.api_gateway.error.exception.custom.JwtValidationException401;
 import tower_of_fisa.paydeuk.api_gateway.util.JwtValidator;
@@ -44,6 +45,10 @@ public class AccessTokenValidationGatewayFilter extends AbstractGatewayFilterFac
             }
 
             String token = authHeader.substring(7); // Remove "Bearer "
+
+            if (jwtValidator.isBlacklisted(token)) {
+                return globalErrorResponder.respond(exchange, HttpStatus.UNAUTHORIZED, new AuthCredientialException401(ErrorDefineCode.IS_ON_BLACKLIST));
+            }
 
             try {
                 jwtValidator.isTokenInvalid(token);

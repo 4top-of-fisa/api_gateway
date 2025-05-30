@@ -11,6 +11,7 @@ public enum ErrorDefineCode {
     EXPIRED_TOKEN("AUTH_02", "토큰이 만료되었습니다"),
     INVALID_ACCESS_TOKEN("AUTH_03", "유효하지 않은 토큰입니다."),
     REFRESH_TOKEN_COOKIE_NOT_FOUND("AUTH_04", "쿠키에 Refresh Token 이 존재하지 않습니다."),
+    IS_ON_BLACKLIST("AUTH_04", "Black List 에 등록된 토큰입니다."),
     MALFORMED_TOKEN("AUTH_03", "");
 
     private final String code;

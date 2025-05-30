@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import tower_of_fisa.paydeuk.api_gateway.error.ErrorDefineCode;
 import tower_of_fisa.paydeuk.api_gateway.error.GlobalErrorResponder;
+import tower_of_fisa.paydeuk.api_gateway.error.exception.custom.AuthCredientialException401;
 import tower_of_fisa.paydeuk.api_gateway.error.exception.custom.JwtValidationException401;
 import tower_of_fisa.paydeuk.api_gateway.error.exception.custom.NoSuchRefreshTokenCookieException404;
 import tower_of_fisa.paydeuk.api_gateway.util.JwtValidator;
@@ -30,7 +31,7 @@ public class RefreshTokenValidationGatewayFilter extends AbstractGatewayFilterFa
     }
 
     @Override
-    public GatewayFilter apply(RefreshTokenValidationGatewayFilter.Config Config) {
+    public GatewayFilter apply(RefreshTokenValidationGatewayFilter.Config config) {
 
         return (exchange,chain) -> {
             log.error("========== Refresh Token Validation Filter =========");
@@ -45,6 +46,11 @@ public class RefreshTokenValidationGatewayFilter extends AbstractGatewayFilterFa
                         new NoSuchRefreshTokenCookieException404(ErrorDefineCode.REFRESH_TOKEN_COOKIE_NOT_FOUND));
             } else {
                 String token = refreshTokenCookie.getValue();
+
+                if (jwtValidator.isBlacklisted(token)) {
+                    return globalErrorResponder.respond(exchange, HttpStatus.UNAUTHORIZED, new AuthCredientialException401(ErrorDefineCode.IS_ON_BLACKLIST));
+                }
+
                 try {
                     jwtValidator.isTokenInvalid(token);
                 } catch (Exception e) {
