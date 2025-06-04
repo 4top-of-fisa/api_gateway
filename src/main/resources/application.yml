@@ -37,6 +37,7 @@ spring:
               - POST
               - DELETE
               - OPTIONS
+              - PATCH
       routes:
         - id: paydeuk-service
           uri: http://localhost:8081
@@ -74,3 +75,8 @@ spring:
 error:
   printStackTrace: true # Stack trace 출력 여부
   printStackTraceLine: 10 # Stack trace 출력 줄 수
+
+#logging:
+#  level:
+#    org.springframework.cloud.gateway: DEBUG
+#    reactor.netty: DEBUG
