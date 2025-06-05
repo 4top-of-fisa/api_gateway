@@ -28,7 +28,9 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: 'http://localhost:3000'
+            allowedOrigins:
+            - 'http://localhost:3000'
+            - 'http://localhost:3001'
             allow-credentials: true
             allowedHeaders: '*'
             allowedMethods:
@@ -37,6 +39,7 @@ spring:
               - POST
               - DELETE
               - OPTIONS
+              - PATCH
       routes:
         - id: paydeuk-service
           uri: http://localhost:8081
