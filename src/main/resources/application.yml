@@ -26,6 +26,7 @@ spring:
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
       globalcors:
+        add-to-simple-url-handler-mapping: true
         cors-configurations:
           '[/**]':
             allowedOrigins:
@@ -69,6 +70,13 @@ spring:
           filters:
             - AccessTokenValidationGatewayFilter
 
+        - id: paydeuk-auth-change-password
+          uri: http://localhost:8083
+          predicates:
+            - Path=/auth/api/change-password
+          filters:
+            - AccessTokenValidationGatewayFilter
+
         - id: paydeuk-auth
           uri: http://localhost:8083
           predicates:
@@ -77,3 +85,7 @@ spring:
 error:
   printStackTrace: true # Stack trace 출력 여부
   printStackTraceLine: 10 # Stack trace 출력 줄 수
+
+log:
+  level:
+    org.springframework.cloud.gateway: DEBUG
