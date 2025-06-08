@@ -39,7 +39,8 @@ public class AccessTokenValidationGatewayFilter extends AbstractGatewayFilterFac
             // JWT 검증 로직
             ServerHttpRequest request = exchange.getRequest();
             String authHeader = request.getHeaders().getFirst("Authorization");
-
+            log.info("Authorization Header: {}", authHeader);
+            request.getHeaders().forEach((key, value) -> log.info("Header '{}': {}", key, value));
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
                 return globalErrorResponder.respond(exchange, HttpStatus.BAD_REQUEST, new InvalidAuthorizationHeaderException400(ErrorDefineCode.INVALID_AUTH_HEADER));
             }

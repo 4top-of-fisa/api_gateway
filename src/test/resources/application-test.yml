@@ -1,0 +1,12 @@
+jwt:
+  secret-key: '9SdwZ4I3Azo9otXn29BLdQuURQWYpE08CavNeFW3TVCk7nnpn4EZ2ZlqSuvlTWGF6LMJWk1FYAv7gKlYkZMpOw=='
+
+spring:
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password: 1234
+
+error:
+  printStackTrace: false
