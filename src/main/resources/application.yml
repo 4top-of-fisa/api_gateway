@@ -1,12 +1,6 @@
 spring:
   config:
-    import: application-secret.yml
-  data:
-    redis:
-      host: paydeck-redis-l9m1b6.serverless.apn2.cache.amazonaws.com
-      port: 6379
-      ssl:
-        enabled: true
+    import: optional:file:/secrets/application-secret.yml
 
   cloud:
     gateway:
@@ -25,6 +19,7 @@ spring:
               - 'Access-Control-Allow-Origin'  # CORS 헤더 포함
             allowedMethods:
               - PUT
+              - PATCH
               - GET
               - POST
               - DELETE
